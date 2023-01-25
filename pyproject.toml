@@ -1,0 +1,7 @@
+[project]
+name = "pingclient"
+version = "0.1"
+dependencies = [
+    "requests",
+    "ipaddr",
+]
