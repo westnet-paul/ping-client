@@ -2,6 +2,7 @@
 name = "pingclient"
 version = "0.2"
 dependencies = [
-    "requests",
+    "dotenv",
     "ipaddr",
+    "requests",
 ]
