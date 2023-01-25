@@ -1,6 +1,10 @@
+from dotenv import load_dotenv
 import ipaddr
 import os
 import requests
+
+
+load_dotenv()
 
 
 class PingError(Exception):

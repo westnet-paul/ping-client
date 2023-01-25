@@ -8,6 +8,7 @@ TEST_URL = "http://py.test"
 
 def test_ping_noenv():
 
+    os.environ.pop("PING_SERVER_URL")
     with pytest.raises(PingError):
         _ = Ping("1.1.1.1")
 

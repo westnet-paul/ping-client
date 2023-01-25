@@ -6,10 +6,9 @@ name = "pypi"
 [packages]
 ipaddr = "*"
 requests = "*"
+python-dotenv = "*"
 
 [dev-packages]
-setuptools = "*"
-build = "*"
 pytest = "*"
 requests-mock = "*"
 
