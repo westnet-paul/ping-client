@@ -15,10 +15,14 @@ def test_ping_noenv():
 
 def test_ping_env():
 
+    address = "1.1.1.1"
+
     os.environ["PING_SERVER_URL"] = TEST_URL
-    instance = Ping("1.1.1.1")
+    instance = Ping(address)
 
     assert instance
+    assert str(instance) == f"{address}: pending"
+    assert repr(instance) == f"<Ping: {address}>"
 
 
 def test_alive(requests_mock):
@@ -32,9 +36,11 @@ def test_alive(requests_mock):
     os.environ["PING_SERVER_URL"] = TEST_URL
     instance = Ping(address)
 
+    assert instance.rtt > 0
     assert instance.address == address
     assert instance.alive
-    assert instance.rtt == 1.23
+
+    assert str(instance) == f"{address}: {instance.rtt}"
 
 
 def test_dead(requests_mock):
@@ -48,8 +54,27 @@ def test_dead(requests_mock):
     os.environ["PING_SERVER_URL"] = TEST_URL
     instance = Ping(address)
 
-    assert instance.address == address
     assert not instance.alive
+    assert instance.address == address
+    assert str(instance) == f"{address}: -"
+
+
+def test_dns(requests_mock):
+
+    address = "example.com"
+    ip = "10.20.30.40"
+
+    requests_mock.get(
+        f"{TEST_URL}/{address}",
+        json={"address": ip, "alive": True, "rtt": 10.5},
+    )
+    os.environ["PING_SERVER_URL"] = TEST_URL
+    instance = Ping(address)
+
+    assert instance.address == address
+    assert instance.ip == ip
+    assert instance.alive
+    assert str(instance) == f"{address}: {instance.rtt}"
 
 
 def test_invalid(requests_mock):

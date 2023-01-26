@@ -1,1 +1,1 @@
-from .client.ping import Ping, PingError
+from .client.ping import NetPing, Ping, PingError

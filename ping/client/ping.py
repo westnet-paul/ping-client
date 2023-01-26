@@ -19,7 +19,7 @@ class BasePing(object):
 
     def __init__(self):
 
-        self._server = os.environ.get('PING_SERVER_URL')
+        self._server = os.environ.get("PING_SERVER_URL")
         if not self._server:
             raise PingError("The SERVER environment variable must be set")
 
@@ -117,13 +117,17 @@ class NetPing(BasePing):
         return "<{}: {}>".format(self.__class__.__name__, self.network)
 
     def ping(self):
-        r = requests.get(
-            "{}/network/{}".format(self._server, self.network)
-        ).json()
+        r = requests.get("{}/network/{}".format(self._server, self.network)).json()
         self._pings = [
-            Ping(ip=h["address"], alive=h["alive"], rtt=h["rtt"]) for h in r["hosts"]
+            Ping(address=h["address"], ip=h["address"], alive=h["alive"], rtt=h["rtt"])
+            for h in r["hosts"]
         ]
 
     def __iter__(self):
-        for ping in self._pings:
-            yield ping
+        return iter(self._pings)
+
+    def __len__(self):
+        return len(self._pings)
+
+    def __getitem__(self, index):
+        return self._pings[index]
